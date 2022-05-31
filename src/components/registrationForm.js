@@ -1,5 +1,7 @@
 import React, {useState,setState} from 'react';
 import './style.css'
+import {database} from '../firebase'
+import {ref,push,child,update} from "firebase/database";
 function RegistrationForm() {
     
     const [email, setEmail] = useState(null);
@@ -22,6 +24,16 @@ function RegistrationForm() {
 
     const handleSubmit  = () => {
         console.log(email,password,confirmPassword);
+    
+        let obj = {
+                email:email,
+                password:password,
+                confirmPassword:confirmPassword,
+            }       
+        const newPostKey = push(child(ref(database), 'posts')).key;
+        const updates = {};
+        updates['/' + newPostKey] = obj
+        return update(ref(database), updates);
     }
 
     return(
